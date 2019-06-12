@@ -1,12 +1,13 @@
 package com.wundermancommerce.interviewtests.graph;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Relationship {
     private String relationship;
-    private String[] emailPersons;
+    private List<String> emailPersons;
 
-    public Relationship(String[] emailPersons, String relationship) {
+    public Relationship(List<String> emailPersons, String relationship) {
         this.relationship = relationship;
         this.emailPersons = emailPersons;
     }
@@ -19,18 +20,18 @@ public class Relationship {
         this.relationship = relationship;
     }
 
-    public String[] getEmailPersons() {
+    public List<String> getEmailPersons() {
         return emailPersons;
     }
 
-    public void setEmailPersons(String[] emailPersons) {
+    public void setEmailPersons(List<String> emailPersons) {
         this.emailPersons = emailPersons;
     }
 
     @Override
     public int hashCode() {
         if(this.emailPersons != null && this.relationship != null)
-            return (this.emailPersons[0]+this.emailPersons[1]+this.relationship).hashCode();
+            return (this.emailPersons.get(0)+this.emailPersons.get(1)+this.relationship).hashCode();
         return super.hashCode();
     }
 
@@ -45,7 +46,7 @@ public class Relationship {
             Relationship r2 = (Relationship)obj;
             if(this.relationship.equals(r2.relationship)){
                 for(String email:this.emailPersons){
-                    if(Arrays.binarySearch(r2.emailPersons,email) == -1)
+                    if(Arrays.binarySearch(r2.emailPersons.toArray(),email) == -1)
                         return false;
                 }
                 return true;

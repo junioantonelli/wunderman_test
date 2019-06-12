@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 /** Class created to solve test send by Wunderman Thompson Commerce
  *
  * As requested, this is a simple test class created to solve 4 exercises.
@@ -25,7 +27,7 @@ public class GraphStructureTest {
     @Before
     public void preparingGraph() {
         this.graphStructure = new GraphStructure();
-        String[] absPath = this.graphStructure.generateAbsolutePaths("people.csv,relationships.csv");
+        List<String> absPath = this.graphStructure.generateAbsolutePaths("people.csv,relationships.csv");
         this.graphStructure.loadFiles(absPath);
         this.graphStructure.buildGraph();
     }

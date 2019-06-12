@@ -20,41 +20,43 @@ public class GraphStructure {
     List<Relationship> relationshipList = new ArrayList<Relationship>();
 
     // 1st of 3 methods created to solve Exercise 1
-    public String[] generateAbsolutePaths(String fileName) {
-        String[] fileNames = fileName.split(",");
-        String[] paths = new String[fileNames.length];
-        for (int i = 0; i < fileNames.length; i++) {
-            paths[i] = getClass().getClassLoader().getResource(fileNames[i]).getPath();
+    public List<String> generateAbsolutePaths(String fileName) {
+        List<String> fileNames = List.of(fileName.split(","));
+        List<String> paths = new ArrayList<String>();
+        for(String nameOfFile : fileNames){
+            paths.add(getClass().getClassLoader().getResource(nameOfFile).getPath());
         }
         return paths;
     }
 
     // 2nd of 3 methods created to solve Exercise 1
-    public void loadFiles(String[] absolutePathFileNames) {
+    public void loadFiles(List<String> absolutePathFileNames) {
         List<File> fileList = new ArrayList<File>();
-        for (int i = 0; i < absolutePathFileNames.length; i++) {
-            fileList.add(new File(absolutePathFileNames[i]));
+        for (int i = 0; i < absolutePathFileNames.size(); i++) {
+            fileList.add(new File(absolutePathFileNames.get(i)));
             LineIterator lineIterator = null;
             try {
                 lineIterator = FileUtils.lineIterator(fileList.get(i), "UTF-8");
                 while (lineIterator.hasNext()) {
                     String line = lineIterator.nextLine();
-                    String[] args = StringUtils.split(line, ",");
-                    if (args.length != 3) {
+                    List<String> args = List.of(StringUtils.split(line, ","));
+                    if (args.size() != 3) {
                         continue;
                     }
-                    if (absolutePathFileNames[i].contains("people.csv")) {
-                        this.peopleMap.put(args[1],
+                    if (absolutePathFileNames.get(i).contains("people.csv")) {
+                        this.peopleMap.put(args.get(1),
                                 new People(
-                                        args[0],
-                                        args[1],
-                                        Integer.parseInt(args[2])));
+                                        args.get(0),
+                                        args.get(1),
+                                        Integer.parseInt(args.get(2))));
                     }
-                    if (absolutePathFileNames[i].contains("relationships.csv")) {
+                    if (absolutePathFileNames.get(i).contains("relationships.csv")) {
                         this.relationshipList.add(
                                 new Relationship(
-                                        new String[]{args[0], args[2]},
-                                        args[1]));
+                                        List.of(new String[]{args.get(0), args.get(2)}),
+                                        args.get(1)
+                                )
+                        );
                     }
                 }
             } catch (IOException io) {
@@ -68,8 +70,8 @@ public class GraphStructure {
     public void buildGraph() {
         for (Relationship r : this.relationshipList) {
             this.graph.addEdge(
-                    peopleMap.get(r.getEmailPersons()[0]),
-                    peopleMap.get(r.getEmailPersons()[1]),
+                    peopleMap.get(r.getEmailPersons().get(0)),
+                    peopleMap.get(r.getEmailPersons().get(1)),
                     r);
         }
     }
